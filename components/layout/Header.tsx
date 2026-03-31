@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import {
   Navbar,
   NavBody,
@@ -16,6 +17,13 @@ import { ModeToggle } from "@/components/ui/ModeToggle";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Close mobile menu when pathname changes (navigation occurs)
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   const navItems = [
     { name: "Home", link: "/" },
@@ -51,7 +59,11 @@ export function Header() {
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
         >
-          <NavItems items={navItems} className="flex flex-col space-x-0 space-y-4 relative w-full items-start" />
+          <NavItems 
+            items={navItems} 
+            className="flex flex-col space-x-0 space-y-4 relative w-full items-start" 
+            onItemClick={() => setMobileMenuOpen(false)}
+          />
         </MobileNavMenu>
       </MobileNav>
     </Navbar>
